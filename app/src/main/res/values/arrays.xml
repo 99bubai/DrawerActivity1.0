@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>日记</item>
+        <item>语音记录</item>
+        <item>手写笔记</item>
+    </string-array>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <!--三个选项：本地日记，云端笔记，提醒功能设置-->
+        <item
+            android:id="@+id/nav_notes"
+            android:icon="@drawable/ic_menu_note"
+            android:title="@string/menu_notes" />
+        <item
+            android:id="@+id/nav_cloud"
+            android:icon="@drawable/ic_menu_cloud"
+            android:title="@string/menu_cloud" />
+        <item
+            android:id="@+id/nav_remind"
+            android:icon="@drawable/ic_menu_remind"
+            android:title="@string/menu_remind" />
+    </group>
+
+</menu>
