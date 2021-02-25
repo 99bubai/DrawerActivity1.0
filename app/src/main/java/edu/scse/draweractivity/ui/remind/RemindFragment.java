@@ -22,8 +22,8 @@ public class RemindFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         remindViewModel =
                 new ViewModelProvider(this).get(RemindViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
+        View root = inflater.inflate(R.layout.fragment_remind, container, false);
+        final TextView textView = root.findViewById(R.id.text_remind);
         remindViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

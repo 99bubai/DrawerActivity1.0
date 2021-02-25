@@ -10,4 +10,5 @@
     <string name="menu_notes">Notes</string>
     <string name="menu_cloud">CloudNotes</string>
     <string name="menu_remind">Remind</string>
+    <string name="menu_setting">Setting</string>
 </resources>

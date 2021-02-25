@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View navHeaderView = navigationView.getHeaderView(0);
         header_imageView=navHeaderView.findViewById(R.id.imageView);
 
+        //点击后fragment的变化要这里配置
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_notes, R.id.nav_cloud, R.id.nav_remind)
+                R.id.nav_notes, R.id.nav_cloud, R.id.nav_remind,R.id.nav_setting)
                 .setDrawerLayout(drawer)
                 .build();
     }//控件统一实例化

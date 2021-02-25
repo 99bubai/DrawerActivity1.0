@@ -10,7 +10,7 @@ public class CloudViewModel extends ViewModel {
 
     public CloudViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("This is cloud fragment");
     }
 
     public LiveData<String> getText() {

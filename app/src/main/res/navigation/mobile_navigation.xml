@@ -15,11 +15,16 @@
         android:id="@+id/nav_cloud"
         android:name="edu.scse.draweractivity.ui.cloud.CloudFragment"
         android:label="@string/menu_cloud"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_cloud" />
 
     <fragment
         android:id="@+id/nav_remind"
         android:name="edu.scse.draweractivity.ui.remind.RemindFragment"
         android:label="@string/menu_remind"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_remind" />
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="edu.scse.draweractivity.ui.setting.SettingFragment"
+        android:label="@string/menu_setting"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

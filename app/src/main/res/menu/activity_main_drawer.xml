@@ -4,7 +4,7 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <!--三个选项：本地日记，云端笔记，提醒功能设置-->
+        <!--四个选项：本地日记，云端笔记，提醒功能设置,设置-->
         <item
             android:id="@+id/nav_notes"
             android:icon="@drawable/ic_menu_note"
@@ -17,6 +17,10 @@
             android:id="@+id/nav_remind"
             android:icon="@drawable/ic_menu_remind"
             android:title="@string/menu_remind" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_menu_setting"
+            android:title="@string/menu_setting" />
     </group>
 
 </menu>

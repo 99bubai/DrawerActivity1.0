@@ -22,8 +22,8 @@ public class CloudFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         cloudViewModel =
                 new ViewModelProvider(this).get(CloudViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
+        View root = inflater.inflate(R.layout.fragment_cloud, container, false);
+        final TextView textView = root.findViewById(R.id.text_cloud);
         cloudViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
