@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="languages">
+    <string-array name="type">
         <item>日记</item>
         <item>语音记录</item>
         <item>手写笔记</item>

@@ -68,36 +68,37 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/editText_add_title"
         android:layout_below="@+id/button_view"
-        android:id="@+id/add_title"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:textSize="20dp"
-        android:text="请输入标题"/>
+        android:hint="请输入标题"/>
     <!--实在搞不成紧密排列，打算用java动态查入button-->
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/lily"
-    android:layout_below="@+id/add_title">
+    android:id="@+id/add_body"
+    android:layout_below="@+id/editText_add_title">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2" />
     <Spinner
-        android:layout_weight="5"
         android:id="@+id/spinner_add_type"
+        android:layout_weight="5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/languages" />
+        android:entries="@array/type" />
 </LinearLayout>
     <EditText
+        android:id="@+id/editText_add_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/add_body"
         android:gravity="top"
-        android:hint="输入正文"
-        android:layout_below="@+id/lily"/>
+        android:hint="输入正文" />
     <!--
     新键日记界面
     提供图片，标签，附件添加功能

@@ -16,6 +16,7 @@ import edu.scse.draweractivity.R;
 
 public class CloudFragment extends Fragment {
 
+
     private CloudViewModel cloudViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
