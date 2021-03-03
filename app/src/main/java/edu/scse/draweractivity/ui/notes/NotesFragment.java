@@ -1,5 +1,8 @@
 package edu.scse.draweractivity.ui.notes;
+import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +16,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import edu.scse.draweractivity.Adapter.TitleAdapter;
 import edu.scse.draweractivity.Activity.NoteAddActivity;
 import edu.scse.draweractivity.R;
+import edu.scse.draweractivity.entity.DataBaseHelper;
+import edu.scse.draweractivity.entity.NoteTitleData;
+import edu.scse.draweractivity.entity.TitleFactory;
+
 public class NotesFragment extends Fragment {
     private NotesViewModel notesViewModel;
     private RecyclerView   recyclerView_home;
     private TitleAdapter         titleAdapter;
     private FloatingActionButton fab;
-
+    private DataBaseHelper dataBaseHelper;
+    private SQLiteDatabase db;
+    List<NoteTitleData> list = null;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notesViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
@@ -33,7 +44,6 @@ public class NotesFragment extends Fragment {
                 //textView.setText(s);
             }
         });
-
         //点击fab跳转到NoteAddActivity
         fab=root.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -44,11 +54,16 @@ public class NotesFragment extends Fragment {
             }
         });
 
+        dataBaseHelper=new DataBaseHelper(getActivity());
+        //得到一个可写的数据库
+        SQLiteDatabase db =dataBaseHelper.getReadableDatabase();
+        list= TitleFactory.createItem(db);
+
         //recyclerView配置布局和adapter
         recyclerView_home = (RecyclerView) root.findViewById(R.id.recyclerView_home);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView_home.setLayoutManager(linearLayoutManager);
-        titleAdapter = new TitleAdapter(getActivity());
+        titleAdapter = new TitleAdapter(getActivity(),list);
         recyclerView_home.setAdapter(titleAdapter);
         return root;
     }
