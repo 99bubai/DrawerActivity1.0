@@ -133,7 +133,7 @@ public class NoteAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_add_main);
 
-        
+
         init();
 
         //GridLayoutManager girdLayoutManager=new GridLayoutManager(this,4);

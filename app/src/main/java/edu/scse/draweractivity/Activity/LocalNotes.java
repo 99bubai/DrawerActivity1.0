@@ -80,6 +80,7 @@ public class LocalNotes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_local_main);
 
+        
         Intent         intent = getIntent();
         intitle=intent.getStringExtra("title");
         inid= intent.getStringExtra("id");
