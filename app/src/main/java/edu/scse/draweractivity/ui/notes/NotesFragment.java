@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import edu.scse.draweractivity.Activity.LocalNotes;
+import edu.scse.draweractivity.Activity.MainActivity;
 import edu.scse.draweractivity.Adapter.TitleAdapter;
 import edu.scse.draweractivity.Activity.NoteAddActivity;
 import edu.scse.draweractivity.R;
@@ -31,8 +35,7 @@ public class NotesFragment extends Fragment {
     private TitleAdapter         titleAdapter;
     private FloatingActionButton fab;
     private DataBaseHelper dataBaseHelper;
-    private SQLiteDatabase db;
-    List<NoteTitleData> list = null;
+    private List<NoteTitleData> list = null;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notesViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
@@ -65,6 +68,25 @@ public class NotesFragment extends Fragment {
         recyclerView_home.setLayoutManager(linearLayoutManager);
         titleAdapter = new TitleAdapter(getActivity(),list);
         recyclerView_home.setAdapter(titleAdapter);
+        //item点击事件
+        titleAdapter.setOnItemClickListener(new TitleAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent=new Intent(getContext(), LocalNotes.class);
+                intent.putExtra("id",list.get(position).getId());
+                intent.putExtra("title",list.get(position).getTitle());
+                startActivity(intent);
+                Toast.makeText(getActivity(),
+                        "click " + position+",id "+list.get(position).getId(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        titleAdapter.setOnItemLongClickListener(new TitleAdapter.OnItemLongClickListener() {
+            @Override
+            public void onClick(int position) {
+                Toast.makeText(getActivity(), "long click " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return root;
     }
 }

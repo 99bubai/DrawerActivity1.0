@@ -10,21 +10,22 @@ import java.util.List;
 import edu.scse.draweractivity.Activity.MainActivity;
 
 public class TitleFactory {
-    public static      String[] Notestitle=new String[1000];
+    public static      String[] Notestitle=new String[1000],Notestype=new String[1000],Notesid=new String[1000];
     public static int      titlecount;
     private static DataBaseHelper dbHelper;
 
     public static void  queryDatabase(SQLiteDatabase db){
         //db=SQLiteDatabase.openOrCreateDatabase("/data/data/edu.scse.draweractivity/databases/test_db",null);
-        //db.execSQL("insert into test_table(title) values(?)", new Object[]{"testable"});
-        String[] strings = new String[]{"title"};
-        Cursor cursor = db.query ("test_table",strings,null,
+        String[] strings = new String[]{"title","id","noteType"};
+        Cursor cursor = db.query ("Notes",strings,null,
                 null,null,null,null);
         titlecount = cursor.getCount ();
         for (int i = 0; i < titlecount; i++) {
             if(cursor.moveToFirst ()) {
                 cursor.move (i);
                 Notestitle[i]=cursor.getString(cursor.getColumnIndex("title"));
+                Notesid[i]=cursor.getString(cursor.getColumnIndex("id"));
+                Notestype[i]=cursor.getString(cursor.getColumnIndex("noteType"));
             }
         }
         db.close();
@@ -34,7 +35,9 @@ public class TitleFactory {
         queryDatabase (db);
         for (int i=0;i < titlecount;i++){
             String title = Notestitle[i];
-            items.add(new NoteTitleData(title));
+            String id = Notesid[i];
+            String type = Notestype[i];
+            items.add(new NoteTitleData(title,id,type));
         }
         return items;
     }

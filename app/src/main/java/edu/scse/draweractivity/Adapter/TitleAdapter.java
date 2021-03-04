@@ -1,6 +1,7 @@
 package edu.scse.draweractivity.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
     Context context;
     private final LayoutInflater       mLayoutInflaterInflater;
     private List<NoteTitleData> list;
+    private OnItemClickListener listener;
+    private OnItemLongClickListener longClickListener;
     public TitleAdapter(Context context, List<NoteTitleData> list){
         this.context=context;
         this.list=list;
@@ -46,6 +49,24 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onClick(position);
+                }
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (longClickListener != null) {
+                    longClickListener.onClick(position);
+                }
+                return true;
+            }
+        });
+
         NoteTitleData noteTitleData=list.get(position);
         holder.textView.setText(noteTitleData.getTitle());
     }
@@ -53,5 +74,22 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+
+    //点击事件
+    //第一步 定义接口
+    public interface OnItemClickListener {
+        void onClick(int position);
+    }
+    //第二步， 写一个公共的方法
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+    public interface OnItemLongClickListener {
+        void onClick(int position);
+    }
+    public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
+        this.longClickListener = longClickListener;
     }
 }

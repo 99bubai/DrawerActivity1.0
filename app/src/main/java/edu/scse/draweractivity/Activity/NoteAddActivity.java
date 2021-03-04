@@ -1,5 +1,4 @@
 package edu.scse.draweractivity.Activity;
-
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,13 +17,11 @@ import edu.scse.draweractivity.Adapter.FlagAdapter;
 import edu.scse.draweractivity.R;
 import edu.scse.draweractivity.ui.FlagLayout;
 import android.view.ViewGroup.LayoutParams;
-
-
 public class NoteAddActivity extends AppCompatActivity {
     private String TAG="NoteAddActivity";
     //private LinearLayoutManager linearLayoutManager;
-    private FlagLayout flagLayout;
-    private String debugFlag[]={"安卓","苹果","谷歌","三星","华为","vivo","魅族","微软","联想","小米","诺基亚"};
+    //private FlagLayout flagLayout;
+    //private String debugFlag[]={"安卓","苹果","谷歌","三星","华为","vivo","魅族","微软","联想","小米","诺基亚"};
     private ImageButton         button_select,button_favorite,button_explain,
             button_picture,button_attachment,button_notification,button_back;
     private EditText editText_title,editText_body;
@@ -32,12 +29,9 @@ public class NoteAddActivity extends AppCompatActivity {
     private String title,body;
     private String[] noteType;
     private static int position=0;
-
-    private RecyclerView recyclerView_add;
-    private FlagAdapter flagAdapter;
     private void init(){
         //recyclerView_add=(RecyclerView)findViewById(R.id.recyclerView_add);
-        flagLayout=(FlagLayout)findViewById(R.id.flagLayout);
+        //flagLayout=(FlagLayout)findViewById(R.id.flagLayout_notesadd);
         button_select=findViewById(R.id.button_add_select);
         button_favorite=findViewById(R.id.button_add_favorite);
         button_explain=findViewById(R.id.button_add_explain);
@@ -57,31 +51,31 @@ public class NoteAddActivity extends AppCompatActivity {
                 noteType=getResources().getStringArray(R.array.type);
                 Log.d(TAG, "title:"+title+",body:"+body+",type:"+noteType[position]);
             }
-        });
+        });//添加日记
         button_favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "favorite");
             }
-        });
+        });//喜爱
         button_explain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"explain");
             }
-        });
+        });//添加标签
         button_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"picture");
             }
-        });
+        });//上传图片
         button_attachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"attachment");
             }
-        });
+        });//
         button_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +87,7 @@ public class NoteAddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG,"back");
             }
-        });
+        });//返回
         spinner_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -107,10 +101,10 @@ public class NoteAddActivity extends AppCompatActivity {
             }
         });
 
-        initFlagLayout();
+        //initFlagLayout();
     }
-    private void initFlagLayout() {
-        flagLayout = (FlagLayout) findViewById(R.id.flagLayout);
+    /*private void initFlagLayout() {
+        flagLayout = (FlagLayout) findViewById(R.id.flagLayout_notesadd);
         ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.leftMargin = 5;
@@ -132,12 +126,14 @@ public class NoteAddActivity extends AppCompatActivity {
                 }
             });
         }
-    }
+    }*/ //界面实现，之前是用静态数组，准备实现动态显示，在输入标签后再显示
     @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_add_main);
+
+        
         init();
 
         //GridLayoutManager girdLayoutManager=new GridLayoutManager(this,4);

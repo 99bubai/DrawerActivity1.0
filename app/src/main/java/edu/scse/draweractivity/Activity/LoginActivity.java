@@ -1,10 +1,14 @@
 package edu.scse.draweractivity.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editText_username,editText_password;
     private Button button_login;
     private TextView textView_find,textView_register;
-    private void init(){
+    private void init(Context context){
         editText_username=findViewById(R.id.editText_login_username);
         editText_password=findViewById(R.id.editText_login_password);
         button_login=findViewById(R.id.button_login_login);
@@ -56,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username=editText_username.getText().toString();
                 String password=editText_password.getText().toString();
-                gotoLogin(username,password);
+                gotoLogin(username,password,context);
                 //Log.d("TAG", "username:"+username+",pas:"+password);
             }
         });
@@ -65,9 +69,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
-        init();
+        init(this);
     }
-    private void gotoLogin(String username,String password) {
+    private void gotoLogin(String username, String password, Context context) {
        /*RequestBody requestBody=new RequestBody() {
             @Nullable
             @Override
@@ -96,22 +100,22 @@ public class LoginActivity extends AppCompatActivity {
                 String string=response.body().string();//response.body只能打开一次
                 Log.d(TAG, "onResponse: " + string);
                 try {
-                    JSONObject json = new JSONObject(string);
+                    JSONObject json=new JSONObject(string);
                     Log.d(TAG, "json:"+json.getString("id"));
                 } catch (JSONException e) {
                     e.printStackTrace();
+
+                    Looper.prepare();//这是干嘛的不知道
+                    Toast toast=Toast.makeText(context,"密码或账户错误",Toast.LENGTH_SHORT);//不能子线程直接toast
+                    toast.show();
+                    Looper.loop();
                 }
-
-
             }
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d(TAG, "onFailure: " + e.getMessage());
             }
         });
-
-
-
 
         /*
         String url = "http://10.0.2.2:8081";//模拟器把localhost试别为本身

@@ -3,13 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <!--button组-->
     <LinearLayout
-        android:id="@+id/button_view_notesadd"
+        android:id="@+id/button_view_local"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
         <!--backgroud设置为透明-->
         <ImageButton
-            android:id="@+id/button_add_select"
+            android:id="@+id/button_local_edit"
             android:layout_height="50dp"
             android:layout_width="match_parent"
             android:layout_weight="4"
@@ -17,7 +18,7 @@
             android:src="@drawable/ic_add_select"
             />
         <ImageButton
-            android:id="@+id/button_add_favorite"
+            android:id="@+id/button_local_favorite"
             android:layout_height="50dp"
             android:layout_width="match_parent"
             android:layout_weight="4"
@@ -25,7 +26,7 @@
             android:src="@drawable/ic_add_favorite"
             />
         <ImageButton
-            android:id="@+id/button_add_explain"
+            android:id="@+id/button_local_explain"
             android:layout_height="50dp"
             android:layout_width="match_parent"
             android:layout_weight="4"
@@ -33,23 +34,7 @@
             android:src="@drawable/ic_add_explain"
             />
         <ImageButton
-            android:id="@+id/button_add_picture"
-            android:layout_height="50dp"
-            android:layout_width="match_parent"
-            android:layout_weight="4"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_add_picture"
-            />
-        <ImageButton
-            android:id="@+id/button_add_attachment"
-            android:layout_height="50dp"
-            android:layout_width="match_parent"
-            android:layout_weight="4"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_add_attachment"
-            />
-        <ImageButton
-            android:id="@+id/button_add_notification"
+            android:id="@+id/button_local_notification"
             android:layout_height="50dp"
             android:layout_width="match_parent"
             android:layout_weight="4"
@@ -57,7 +42,7 @@
             android:src="@drawable/ic_add_notification"
             />
         <ImageButton
-            android:id="@+id/button_add_back"
+            android:id="@+id/button_local_back"
             android:layout_height="50dp"
             android:layout_width="match_parent"
             android:layout_weight="4"
@@ -67,44 +52,22 @@
     </LinearLayout>
     <!--自定义布局-->
     <edu.scse.draweractivity.ui.FlagLayout
-        android:id="@+id/flagLayout_notesadd"
-        android:layout_weight="2"
+        android:id="@+id/flagLayout_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/button_view_notesadd"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/add_body"
-    android:layout_below="@+id/flagLayout_notesadd">
-    <EditText
-        android:id="@+id/editText_add_title"
+        android:layout_below="@+id/button_view_local"/>
+    <TextView
+        android:id="@+id/textView_local_title"
         android:layout_width="match_parent"
-        android:layout_weight="2"
         android:layout_height="60dp"
         android:textSize="20dp"
-        android:hint="请输入标题"/>
-    <Spinner
-        android:id="@+id/spinner_add_type"
-        android:layout_weight="6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/type" />
-</LinearLayout>
-    <EditText
-        android:id="@+id/editText_add_body"
+        android:layout_below="@+id/flagLayout_local"
+        android:hint="标题"/>
+    <TextView
+        android:id="@+id/textView_local_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/add_body"
+        android:layout_below="@+id/textView_local_title"
         android:gravity="top"
-        android:hint="输入正文" />
-    <!--
-    新键日记界面
-    提供图片，标签，附件添加功能
-    需要支持拍照，录音，手写添加功能
-    预计设置三个按钮，三种日记格式
-    按钮1：添加图片，再其中提供照相支持
-    按钮2：附件添加
-    按钮3：日记格式选择（一般日记，语音日记，手写日记）
-    -->
+        android:hint="正文" />
 </RelativeLayout>
