@@ -50,6 +50,7 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+            //设置监听
             @Override
             public void onClick(View v) {
                 if (listener != null) {
@@ -58,10 +59,11 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            //设置监听
             @Override
             public boolean onLongClick(View v) {
                 if (longClickListener != null) {
-                    longClickListener.onClick(position);
+                    longClickListener.onClick(position,holder.itemView);
                 }
                 return true;
             }
@@ -76,6 +78,10 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
         return list.size();
     }
 
+    public void removeNotes(int postion) {
+        list.remove(postion);
+        notifyDataSetChanged();
+    }
 
     //点击事件
     //第一步 定义接口
@@ -86,9 +92,12 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+    //长按事件
+    //第一步 定义接口
     public interface OnItemLongClickListener {
-        void onClick(int position);
+        void onClick(int position,View view);
     }
+    //第二步， 写一个公共的方法
     public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
