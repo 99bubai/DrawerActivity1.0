@@ -178,10 +178,11 @@ public class NoteAddActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         this.finish();
     }
+
 
     @Override
     public void onBackPressed() {

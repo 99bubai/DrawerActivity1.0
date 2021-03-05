@@ -39,8 +39,8 @@ public class NotesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notesViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
+        //加载Fragment布局文件
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        //将定义的布局加载出来
         notesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -101,8 +101,6 @@ public class NotesFragment extends Fragment {
         });
         return root;
     }
-
-
     private void setListener(TitleAdapter titleAdapter){
 
     }

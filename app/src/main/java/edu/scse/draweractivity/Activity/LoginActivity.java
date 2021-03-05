@@ -1,5 +1,6 @@
 package edu.scse.draweractivity.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -137,6 +138,11 @@ public class LoginActivity extends AppCompatActivity {
         });*/
 
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
 }
