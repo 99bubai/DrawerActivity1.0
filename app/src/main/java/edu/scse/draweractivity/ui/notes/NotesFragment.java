@@ -2,6 +2,7 @@ package edu.scse.draweractivity.ui.notes;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,23 +31,22 @@ import edu.scse.draweractivity.entity.NoteTitleData;
 import edu.scse.draweractivity.entity.TitleFactory;
 
 public class NotesFragment extends Fragment {
+    private String TAG="NotesFragment";
     private NotesViewModel notesViewModel;
     private RecyclerView   recyclerView_home;
     private TitleAdapter         titleAdapter;
     private FloatingActionButton fab;
     private DataBaseHelper dataBaseHelper;
+    private SQLiteDatabase db;
     private List<NoteTitleData> list = null;
+    private int first=0;//识别是否是首次创建
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notesViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
-        //加载Fragment布局文件
+        Log.d(TAG, "onCreateView");
+        first=0;
+        //Fragment布局渲染
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        notesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
         //点击fab跳转到NoteAddActivity
         fab=root.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +58,7 @@ public class NotesFragment extends Fragment {
         });
         //得到一个可写的数据库
         dataBaseHelper=new DataBaseHelper(getActivity());
-        SQLiteDatabase db =dataBaseHelper.getReadableDatabase();
+        db =dataBaseHelper.getReadableDatabase();
         list= TitleFactory.createItem(db);//db在titlefactory的子方法中被关闭
         //recyclerView配置布局和adapter
         recyclerView_home = (RecyclerView) root.findViewById(R.id.recyclerView_home);
@@ -66,6 +66,22 @@ public class NotesFragment extends Fragment {
         recyclerView_home.setLayoutManager(linearLayoutManager);
         titleAdapter = new TitleAdapter(getActivity(),list);
         recyclerView_home.setAdapter(titleAdapter);
+
+        return root;
+    }
+
+    @Override//活动在singletask模式下fragment不会oncreate
+    public void onStart() {
+        super.onStart();
+        if(first==0){
+            first=1;
+        }else if (first==1){
+            db =dataBaseHelper.getReadableDatabase();
+            list= TitleFactory.createItem(db);
+            titleAdapter = new TitleAdapter(getActivity(),list);
+            recyclerView_home.setAdapter(titleAdapter);
+            Log.d(TAG, TAG+":onStart: ");
+        }
         //item点击事件，实现adapter提供的接口
         titleAdapter.setOnItemClickListener(new TitleAdapter.OnItemClickListener() {
             @Override
@@ -99,11 +115,5 @@ public class NotesFragment extends Fragment {
                 Toast.makeText(getActivity(), "long click " + position, Toast.LENGTH_SHORT).show();
             }
         });
-        return root;
     }
-    private void setListener(TitleAdapter titleAdapter){
-
-    }
-
-
 }

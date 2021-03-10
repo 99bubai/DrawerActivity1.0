@@ -1,6 +1,7 @@
 package edu.scse.draweractivity.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -72,6 +73,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login_main);
         init(this);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.finish();
+    }
+
+
     private void gotoLogin(String username, String password, Context context) {
        /*RequestBody requestBody=new RequestBody() {
             @Nullable
@@ -84,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                 bufferedSink.writeUtf8("OKhttp");
             }
         };*/
-
         RequestBody requestBody= new FormBody.Builder()
                 .add("name",username)//111or112
                 .add("password",password)//111or112
@@ -103,9 +111,18 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     JSONObject json=new JSONObject(string);
                     Log.d(TAG, "json:"+json.getString("id"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    //将登陆的信息存入xml文件
+                    SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sp.edit();
+                    editor.putString("username",json.getString("userName"));
+                    editor.putString("password",json.getString("userPassword"));
+                    editor.apply();
 
+                    Intent intent=new Intent(LoginActivity.this,UserHomeActivity.class);
+                    startActivity(intent);
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
                     Looper.prepare();//这是干嘛的不知道
                     Toast toast=Toast.makeText(context,"密码或账户错误",Toast.LENGTH_SHORT);//不能子线程直接toast
                     toast.show();
@@ -137,12 +154,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });*/
 
-    }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent=new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
 }

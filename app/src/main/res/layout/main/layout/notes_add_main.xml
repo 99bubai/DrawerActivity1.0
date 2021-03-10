@@ -22,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_weight="4"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_add_favorite"
             />
         <ImageButton
             android:id="@+id/button_add_explain"

@@ -22,10 +22,10 @@ import edu.scse.draweractivity.entity.NoteTitleData;
 import edu.scse.draweractivity.entity.TitleFactory;
 import edu.scse.draweractivity.ui.FlagLayout;
 public class LocalNotesActivity extends AppCompatActivity {
-    private String
+    private static String
             TAG="LocalNotes",
             intitle,inid,
-            noteType,title,textPath;
+            noteType,title,textPath,favorite;
     private String[]
             flag=new String[100];
     private ImageButton
@@ -48,6 +48,11 @@ public class LocalNotesActivity extends AppCompatActivity {
         textView_title=findViewById(R.id.textView_local_title);
         flagLayout=(FlagLayout)findViewById(R.id.flagLayout_local);
         //显示获取到的标题和正文
+        if(favorite!=null&&Integer.parseInt(favorite)==1){
+                button_favorite.setImageResource(R.drawable.ic_add_favorite_filling);
+        }else {
+            button_favorite.setImageResource(R.drawable.ic_add_favorite);
+        }
         textView_title.setText(title);
         textView_body.setText(textPath);
         //初始化标签栏
@@ -89,7 +94,7 @@ public class LocalNotesActivity extends AppCompatActivity {
         //数据库操作
         dataBaseHelper=new DataBaseHelper(this);
         db =dataBaseHelper.getReadableDatabase();
-        String[] Notes=new String[]{"noteType","title","textPath"};
+        String[] Notes=new String[]{"noteType","title","textPath,favorite"};
         String[] Flag=new String[]{"flag"};
         int flagcount;
         //查询id对应的数据的标题、正文、类型以及标签
@@ -103,6 +108,7 @@ public class LocalNotesActivity extends AppCompatActivity {
         noteType=cursor_notes.getString(cursor_notes.getColumnIndex("noteType"));
         title=cursor_notes.getString(cursor_notes.getColumnIndex("title"));
         textPath=cursor_notes.getString(cursor_notes.getColumnIndex("textPath"));
+        favorite=cursor_notes.getString(cursor_notes.getColumnIndex("favorite"));
         //flag表的数据
         flagcount=cursor_flag.getCount();
         for (int i=0;i<flagcount;i++){
@@ -111,9 +117,13 @@ public class LocalNotesActivity extends AppCompatActivity {
                 flag[i]=cursor_flag.getString(cursor_flag.getColumnIndex("flag"));
             }
         }
-
         init();
         db.close();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 }

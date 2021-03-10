@@ -44,9 +44,9 @@ public class FlagLayout extends ViewGroup {
             //得到LayoutParams
             MarginLayoutParams lp = (MarginLayoutParams) getLayoutParams();
             //子View占据的宽度
-            int childWidth = child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
+            int childWidth = child.getMeasuredWidth() + 10;
             //子View占据的高度
-            int childHeight = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
+            int childHeight = child.getMeasuredHeight() + 10;
             //换行时候
             if(lineWidth + childWidth > sizeWidth){
                 //对比得到最大的宽度
@@ -71,7 +71,7 @@ public class FlagLayout extends ViewGroup {
         //wrap_content
         //setMeasuredDimension(modeWidth == MeasureSpec.EXACTLY ? sizeWidth : width, modeHeight == MeasureSpec.EXACTLY ? sizeHeight : height);
         setMeasuredDimension(sizeWidth,
-                height+50);
+                height);
 
     }
     @Override

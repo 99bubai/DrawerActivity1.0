@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 public class DataBaseHelper extends SQLiteOpenHelper {
     private String TAG="DataBaseHelper";
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "notes_db",null,3);//db文件
+        super(context, "notes_db",null,3);//db文件,这是本地数据库
     }
 
     @Override
@@ -27,6 +27,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         "textPath text, " +
                         "voicePath text, " +
                         "title text, " +
+                        "favorite bit,"+//喜爱状态
                         "fileId int)";
         String sql_flag=
                 "create table Flag(" +
@@ -36,8 +37,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(sql_files);
         db.execSQL(sql_notes);
         db.execSQL(sql_flag);
-        db.execSQL("insert into Notes values(null,'0',null,'firstpath',null,'firsttitle',null)");
-        db.execSQL("insert into Notes values(null,'0',null,'secondpath',null,'secondtitle',null)");
+        db.execSQL("insert into Notes values(null,'0',null,'firstpath',null,'firsttitle',null,null)");
+        db.execSQL("insert into Notes values(null,'0',null,'secondpath',null,'secondtitle',null,null)");
         db.execSQL("insert into flag values(1,'firstflag')");
         db.execSQL("insert into flag values(1,'secondflag')");
         db.execSQL("insert into flag values(2,'firstflag')");

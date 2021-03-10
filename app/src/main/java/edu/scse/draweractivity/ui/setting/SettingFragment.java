@@ -12,25 +12,38 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.scse.draweractivity.Adapter.SettingAdapter;
+import edu.scse.draweractivity.Adapter.TitleAdapter;
 import edu.scse.draweractivity.R;
 
 public class SettingFragment extends Fragment {
     private SettingViewModel settingViewModel;
+    private List<String> list;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        settingViewModel=new ViewModelProvider(this).get(SettingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_setting, container, false);
-        final TextView textView = root.findViewById(R.id.text_setting);
-        settingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+        recyclerView=(RecyclerView) root.findViewById(R.id.recyclerView_setting);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+        SettingAdapter settingAdapter = new SettingAdapter(getActivity());
+        recyclerView.setAdapter(settingAdapter);
+
+
         return root;
     }
+
+
 }

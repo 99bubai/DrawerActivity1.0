@@ -68,7 +68,6 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
                 return true;
             }
         });
-
         NoteTitleData noteTitleData=list.get(position);
         holder.textView.setText(noteTitleData.getTitle());
     }
@@ -83,7 +82,8 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    //点击事件
+    //点击事件与长按事件接口
+
     //第一步 定义接口
     public interface OnItemClickListener {
         void onClick(int position);
@@ -92,7 +92,6 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-    //长按事件
     //第一步 定义接口
     public interface OnItemLongClickListener {
         void onClick(int position,View view);
@@ -101,4 +100,5 @@ public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> 
     public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
+
 }
