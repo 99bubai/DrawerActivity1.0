@@ -73,14 +73,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login_main);
         init(this);
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         this.finish();
     }
-
-
     private void gotoLogin(String username, String password, Context context) {
        /*RequestBody requestBody=new RequestBody() {
             @Nullable
@@ -110,15 +107,19 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "onResponse: " + string);
                 try {
                     JSONObject json=new JSONObject(string);
+                    String user_name;
                     Log.d(TAG, "json:"+json.getString("id"));
                     //将登陆的信息存入xml文件
                     SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
                     SharedPreferences.Editor editor=sp.edit();
-                    editor.putString("username",json.getString("userName"));
+                    user_name=json.getString("userName");
+                    editor.putString("username",user_name);
                     editor.putString("password",json.getString("userPassword"));
                     editor.apply();
 
                     Intent intent=new Intent(LoginActivity.this,UserHomeActivity.class);
+                    intent.putExtra("username",user_name);
+
                     startActivity(intent);
                 }
                 catch (JSONException e) {

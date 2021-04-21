@@ -1,11 +1,16 @@
 package edu.scse.draweractivity.Activity;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -14,22 +19,31 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import edu.scse.draweractivity.Adapter.FlagAdapter;
+
+import edu.scse.draweractivity.Adapter.FileAdapter;
 import edu.scse.draweractivity.R;
 import edu.scse.draweractivity.entity.DataBaseHelper;
+import edu.scse.draweractivity.entity.GetPathFromUri4kitkat;
 import edu.scse.draweractivity.ui.FlagLayout;
-import edu.scse.draweractivity.ui.notes.NotesFragment;
 
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class NoteAddActivity extends AppCompatActivity {
     private String TAG="NoteAddActivity";
@@ -46,12 +60,17 @@ public class NoteAddActivity extends AppCompatActivity {
     private DataBaseHelper dataBaseHelper;
     private SQLiteDatabase db;
     private static int debugposition=0;
-    private int favorite=0;
+    private int favorite=0,notification=0;
+    private RecyclerView recyclerView_file;
+    private FileAdapter fileAdapter;
+    private List<String> fileList=new ArrayList<String>();
+    private List<String> urilist=new ArrayList<>();
+
     private void init(){
         dataBaseHelper=new DataBaseHelper(this);
         db =dataBaseHelper.getWritableDatabase();
-
         {
+            recyclerView_file=findViewById(R.id.recyclerView_file);
             flagLayout = (FlagLayout) findViewById(R.id.flagLayout_notesadd);
             button_select = findViewById(R.id.button_add_select);
             button_favorite = findViewById(R.id.button_add_favorite);
@@ -60,13 +79,16 @@ public class NoteAddActivity extends AppCompatActivity {
             button_picture = findViewById(R.id.button_add_picture);
             button_attachment = findViewById(R.id.button_add_attachment);
             button_notification = findViewById(R.id.button_add_notification);
+            button_notification.setImageResource(R.drawable.ic_add_notification);
             button_back = findViewById(R.id.button_add_back);
             editText_body = findViewById(R.id.editText_add_body);
             editText_title = findViewById(R.id.editText_add_title);
             spinner_type = findViewById(R.id.spinner_add_type);
         }//注册组件
         //点击事件
+        {
         button_select.setOnClickListener(new View.OnClickListener() {
+            int cursorback_id;
             @Override
             public void onClick(View v) {
                 title=editText_title.getText().toString();
@@ -82,15 +104,32 @@ public class NoteAddActivity extends AppCompatActivity {
                         null, null, null, "ID DESC");
                 if(cursor.moveToNext())
                 {
-                    int id = cursor.getInt(cursor.getColumnIndex("id"));
+                    cursorback_id = cursor.getInt(cursor.getColumnIndex("id"));
                     // 这个id就是最大值
-                    Log.d(TAG, "id:"+id);
+                    Log.d(TAG, "id:"+cursorback_id);
                 }
+                //将标签内容写入数据库（本地
+                for(int p=0;debugFlag[p]!=null;p++){
+                    db.execSQL("insert into Flag values(?,?)",new String[]{
+                            String.valueOf(cursorback_id),debugFlag[p]});
+                    Log.d(TAG, "debugFlag"+p+":"+debugFlag[p]);
+                }
+                for(int p=0;p<fileList.size();p++){
+                    db.execSQL("insert into Files values(null,?,?)",new String[]{String.valueOf(cursorback_id),fileList.get(p)});
+                    Log.d(TAG, "fileListAll: "+fileList.get(p));
+                }
+                debugposition=0;//static值复原
+
                 //将标签内容写入数据库（网络同步
 
                 //将喜爱状态写入本地数据库（这个数据需要网络同步
 
                 //将闹钟状态写入本地数据库（这个数据不需要网络同步
+
+                //将文件路径写入数据库
+
+
+
                 Intent intent=new Intent(NoteAddActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -158,6 +197,22 @@ public class NoteAddActivity extends AppCompatActivity {
         button_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(notification==0){
+                    button_notification.setImageResource(R.drawable.ic_add_notification_filling);
+                    notification=1;
+                    //自定义时间选择器，重写了cancel方法，cancel后更改图标
+                    TimePickerDialogSelf timePickerDialog=new TimePickerDialogSelf(NoteAddActivity.this,
+                            new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                        }
+                    },0,0,true);
+                    timePickerDialog.show();
+                }else if(notification==1){
+                    button_notification.setImageResource(R.drawable.ic_add_notification);
+                    notification=0;
+                }
                 Log.d(TAG,"notification");
             }
         });//闹钟
@@ -181,13 +236,19 @@ public class NoteAddActivity extends AppCompatActivity {
                 // Another interface callback
             }
         });
+        }
         //initFlagLayout();
+
+        LinearLayoutManager linearLayout=new LinearLayoutManager(NoteAddActivity.this);
+        recyclerView_file.setLayoutManager(linearLayout);
+        fileAdapter=new FileAdapter(NoteAddActivity.this,fileList);
+        recyclerView_file.setAdapter(fileAdapter);
+
     }
     private void openAlbum(){
-        Intent intent = new Intent("android.intent.action.GET_CONTENT");
-        intent.setType("*/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent,2);//启动相册
+        Intent intent = new Intent(Intent.ACTION_PICK);//用action_pick才会返回带data的uri
+        intent.setType("image/*");
+        startActivityForResult(intent,1);//启动相册//需要加一个弹出框让用户选择相机
     }
 
     private void initFlagLayout() {
@@ -217,20 +278,17 @@ public class NoteAddActivity extends AppCompatActivity {
     //接收返回消息
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode== 2){
-            Uri uri=data.getData();
-            String url=String.valueOf(uri);
-            Log.d(TAG, "onActivityResult: "+url);
-            String[] proj = {MediaStore.Images.Media.DATA};
-
- Cursor actualimagecursor = managedQuery(uri, proj, null, null, null);
-int actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
- actualimagecursor.moveToFirst();
-String img_path = actualimagecursor.getString(actual_image_column_index);
-
-        }
-
         super.onActivityResult(requestCode, resultCode, data);
+        if (data==null) return;
+        if(requestCode== 1){//相册返回
+            Uri uri=data.getData();
+            urilist.add(String.valueOf(uri));
+            String string_uri=String.valueOf(uri);
+            String url= GetPathFromUri4kitkat.getPath(NoteAddActivity.this,uri);
+            fileList.add(url);
+            Log.d(TAG, "Uri:"+string_uri);
+            Log.d(TAG, "file: "+url);
+        }
     }
 
     @SuppressLint("WrongConstant")
@@ -242,9 +300,59 @@ String img_path = actualimagecursor.getString(actual_image_column_index);
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(fileList.size()!=0){
+            fileAdapter=new FileAdapter(NoteAddActivity.this,fileList);
+            recyclerView_file.setAdapter(fileAdapter);
+        }//不是初次加载
+        fileAdapter.setOnItemClickListener(new FileAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //设置intent的Action属性
+                intent.setAction(Intent.ACTION_VIEW);
+                //获取文件file的MIME类型
+                String type = "image/jpeg";
+                //设置intent的data和Type属性。
+                //intent.setDataAndType(Uri.parse(fileList.get(position)), type);
+                intent.setDataAndType(Uri.parse(urilist.get(position)), type);
+                //跳转
+                startActivity(intent);
+            }
+        });
+        fileAdapter.setOnItemLongClickListener(new FileAdapter.OnItemLongClickListener() {
+            @Override
+            public void onClick(int position, View view) {
+            }
+        });
+
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
 
+    //重写时间选择器
+    private final class TimePickerDialogSelf extends TimePickerDialog {
+        public TimePickerDialogSelf(Context context, OnTimeSetListener listener, int hourOfDay, int minute, boolean is24HourView) {
+            super(context, listener, hourOfDay, minute, is24HourView);
+        }
+        public TimePickerDialogSelf(Context context, int themeResId, OnTimeSetListener listener, int hourOfDay, int minute, boolean is24HourView) {
+            super(context, themeResId, listener, hourOfDay, minute, is24HourView);
+        }
+        //重写cancel后事件，使图标改变
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if (which==BUTTON_NEGATIVE){
+                button_notification.setImageResource(R.drawable.ic_add_notification);
+                notification=0;
+            }
+            super.onClick(dialog, which);
+        }
 
+    }
 }

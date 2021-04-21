@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DrawerActivity"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Adapter.SettingAdapter"></activity>
+        <activity android:name=".Activity.SearchActivity"></activity>
         <activity android:name=".Activity.UserHomeActivity" />
         <activity android:name=".Activity.LocalNotesActivity" />
         <activity

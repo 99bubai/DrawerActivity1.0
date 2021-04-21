@@ -8,7 +8,9 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -50,12 +52,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar toolbar;//顶部菜单栏
     //private FloatingActionButton fab;//app_bar_main圆形添加键
     private DrawerLayout drawer;
+
     private NavigationView navigationView;
     private ImageView header_imageView;
     private TitleAdapter titleAdapter;
 
     private void init(){
         toolbar = findViewById(R.id.toolbar);
+
         //fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //获取头部布局
         View navHeaderView = navigationView.getHeaderView(0);
         header_imageView=navHeaderView.findViewById(R.id.imageView);
+
 
         //点击后fragment的变化要这里配置
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Log.d(TAG, "json:"+json.getString("id"));
 
                             Intent intent=new Intent(MainActivity.this,UserHomeActivity.class);
+                            intent.putExtra("username",json.getString("userName"));
                             startActivity(intent);
                         }
                         catch (JSONException e) {
@@ -133,6 +139,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         init();
         setSupportActionBar(toolbar);
+        //toolbar点击事件
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_search:
+                        Log.d(TAG, "onMenuItemClick: actionsearch");
+                        Intent intent=new Intent(MainActivity.this,SearchActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);

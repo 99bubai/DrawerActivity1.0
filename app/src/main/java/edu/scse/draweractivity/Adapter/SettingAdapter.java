@@ -12,19 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import edu.scse.draweractivity.R;
 
+//根据传入的layout与id构建item，只提供点击事件，用来给充当设定菜单的recycleview使用
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ViewHolder> {
     Context context;
     private final LayoutInflater       mLayoutInflaterInflater;
-    private List<String> list=new ArrayList<String>(){
-        {
-            this.add("用户中心");
-            this.add("权限管理");
-        }
-    };;
+    private static int r_layout,r_id;
+    private List<String> list;
     private OnItemClickListener listener;
 
-    public SettingAdapter(Context context){
+    public SettingAdapter(Context context,List<String> list, int r_layout,int r_id){
         this.context=context;
+        this.list=list;
+        this.r_id=r_id;
+        this.r_layout=r_layout;
         this.mLayoutInflaterInflater=LayoutInflater.from(context);
     }
 
@@ -32,7 +32,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ViewHold
         public TextView textView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView=(TextView) itemView.findViewById(R.id.item_list_setting);
+            textView=(TextView) itemView.findViewById(r_id);
         }
         public TextView getActivity() {
             return textView;
@@ -41,7 +41,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= mLayoutInflaterInflater.inflate(R.layout.item_setting_list,parent,false);
+        View view= mLayoutInflaterInflater.inflate(r_layout,parent,false);
         ViewHolder viewHolder=new ViewHolder(view);
         return viewHolder;
     }
